@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
 	Card,
 	CardActions,
@@ -6,6 +6,7 @@ import {
 	CardMedia,
 	Button,
 	Typography,
+	CircularProgress,
 } from '@material-ui/core';
 import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -17,8 +18,20 @@ import { useDispatch } from 'react-redux';
 import useStyles from './styles';
 
 export default function Post({ post, setCurrentId }) {
+	const [likeCount, setLikeCount] = useState(post.likeCount);
+	const [deleteBool, setDeleteBool] = useState(false);
 	const dispatch = useDispatch();
 	const classes = useStyles();
+
+	const handleDelete = () => {
+		dispatch(deletePost(post._id));
+		setDeleteBool(true);
+	};
+
+	const handleLike = () => {
+		dispatch(likePost(post._id));
+		setLikeCount(likeCount + 1);
+	};
 
 	return (
 		<Card className={classes.card}>
@@ -60,23 +73,30 @@ export default function Post({ post, setCurrentId }) {
 					size='small'
 					color='primary'
 					style={{ display: 'flex', alignItems: 'flex-start' }}
-					onClick={() => dispatch(likePost(post._id))}
+					onClick={handleLike}
 				>
 					<ThumbUpAltIcon fontSize='small' />
-					&nbsp;Like&nbsp;{post.likeCount}
+					&nbsp;Like&nbsp;{likeCount}
 				</Button>
-				<Button
-					size='small'
-					style={{
-						display: 'flex',
-						alignItems: 'flex-start',
-						color: '#ff1010',
-					}}
-					onClick={() => dispatch(deletePost(post._id))}
-				>
-					<DeleteIcon fontSize='small' />
-					Delete
-				</Button>
+				{!deleteBool ? (
+					<Button
+						size='small'
+						style={{
+							display: 'flex',
+							alignItems: 'flex-start',
+							color: '#ff1010',
+						}}
+						onClick={handleDelete}
+					>
+						<DeleteIcon fontSize='small' />
+						Delete
+					</Button>
+				) : (
+					<CircularProgress
+						size='1.5rem'
+						style={{ color: '#ff1010' }}
+					/>
+				)}
 			</CardActions>
 		</Card>
 	);

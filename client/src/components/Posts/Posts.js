@@ -12,7 +12,15 @@ export default function Posts({ setCurrentId }) {
 	console.log(posts);
 
 	return !posts.length ? (
-		<CircularProgress />
+		<Grid
+			className={classes.container}
+			container
+			style={{ height: '100%' }}
+			justify='center'
+			alignItems='center'
+		>
+			<CircularProgress size='3.5rem' />
+		</Grid>
 	) : (
 		<Grid
 			className={classes.container}

@@ -16,7 +16,7 @@ export default function Posts({ setCurrentId }) {
 			className={classes.container}
 			container
 			style={{ height: '100%' }}
-			justify='center'
+			justifyContent='center'
 			alignItems='center'
 		>
 			<CircularProgress size='3.5rem' />

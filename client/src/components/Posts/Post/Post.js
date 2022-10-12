@@ -18,7 +18,7 @@ import { useDispatch } from 'react-redux';
 import useStyles from './styles';
 
 export default function Post({ post, setCurrentId }) {
-	const [likeCount, setLikeCount] = useState(post.likeCount);
+	// const [likeCount, setLikeCount] = useState(post.likeCount);
 	const [deleteBool, setDeleteBool] = useState(false);
 	const dispatch = useDispatch();
 	const classes = useStyles();
@@ -30,7 +30,7 @@ export default function Post({ post, setCurrentId }) {
 
 	const handleLike = () => {
 		dispatch(likePost(post._id));
-		setLikeCount(likeCount + 1);
+		// setLikeCount(likeCount + 1);
 	};
 
 	return (
@@ -41,7 +41,7 @@ export default function Post({ post, setCurrentId }) {
 				title={post.title}
 			/>
 			<div className={classes.overlay}>
-				<Typography variant='h6'>{post.creator}</Typography>
+				<Typography variant='h6'>{post.name}</Typography>
 				<Typography variant='body2'>
 					{moment(post.createdAt).fromNow()}
 				</Typography>
@@ -76,7 +76,7 @@ export default function Post({ post, setCurrentId }) {
 					onClick={handleLike}
 				>
 					<ThumbUpAltIcon fontSize='small' />
-					&nbsp;Like&nbsp;{likeCount}
+					&nbsp;Like&nbsp;{post.likes}
 				</Button>
 				{!deleteBool ? (
 					<Button

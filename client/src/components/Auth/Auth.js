@@ -6,25 +6,52 @@ import {
 	Grid,
 	Typography,
 	Container,
-	TextField,
 } from '@material-ui/core';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 
 import useStyles from './styles';
 import Input from './Input';
+import { signIn, signUp } from '../../actions/auth';
+import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+
+const initialState = {
+	firstName: '',
+	lastName: '',
+	email: '',
+	password: '',
+	confirmPassword: '',
+};
 
 const Auth = () => {
 	const classes = useStyles();
 	const [showPassword, setShowPassword] = useState(false);
-
-	const isSignup = false;
+	const [isSignup, setIsSignUp] = useState(false);
+	const [formData, setFormData] = useState(initialState);
+	const dispatch = useDispatch();
+	const history = useHistory();
 
 	const handleShowPassword = () =>
 		setShowPassword((prevShowPassword) => !prevShowPassword);
 
-	const handleSubmit = () => {};
+	const handleSubmit = (e) => {
+		e.preventDefault();
 
-	const handleChange = () => {};
+		if (isSignup) {
+			dispatch(signUp(formData, history));
+		} else {
+			dispatch(signIn(formData, history));
+		}
+	};
+
+	const handleChange = (e) => {
+		setFormData({ ...formData, [e.target.name]: e.target.value });
+	};
+
+	const switchMode = () => {
+		setIsSignUp((prevIsSignUp) => !prevIsSignUp);
+		setShowPassword(false);
+	};
 
 	return (
 		<Container component='main' maxWidth='xs'>
@@ -47,8 +74,8 @@ const Auth = () => {
 									half
 								/>
 								<Input
-									name='firstName'
-									label='First Name'
+									name='lastName'
+									label='Last Name'
 									handleChange={handleChange}
 									half
 								/>
@@ -85,6 +112,13 @@ const Auth = () => {
 					>
 						{isSignup ? 'Sign Up' : 'Sign In'}
 					</Button>
+					<Grid container justifyContent='center'>
+						<Button onClick={switchMode}>
+							{isSignup
+								? 'Already have an account? Sign In'
+								: "Don't have an account? Sign Up"}
+						</Button>
+					</Grid>
 				</form>
 			</Paper>
 		</Container>

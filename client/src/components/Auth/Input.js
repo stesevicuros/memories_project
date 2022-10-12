@@ -24,19 +24,23 @@ const Input = ({
 				autoFocus={autoFocus}
 				type={type}
 				InputProps={
-					name === 'password' && {
-						endAdornment: (
-							<InputAdornment position='end'>
-								<IconButton onClick={handleShowPassword}>
-									{type === 'password' ? (
-										<Visibility />
-									) : (
-										<VisibilityOff />
-									)}
-								</IconButton>
-							</InputAdornment>
-						),
-					}
+					name === 'password'
+						? {
+								endAdornment: (
+									<InputAdornment position='end'>
+										<IconButton
+											onClick={handleShowPassword}
+										>
+											{type === 'password' ? (
+												<VisibilityOff />
+											) : (
+												<Visibility />
+											)}
+										</IconButton>
+									</InputAdornment>
+								),
+						  }
+						: null
 				}
 			/>
 		</Grid>
@@ -44,3 +48,9 @@ const Input = ({
 };
 
 export default Input;
+
+/*'You have created a new client application that uses libraries
+ for user authentication or authorization that will soon be deprecated.
+  New clients must use the new libraries instead; existing clients must also
+   migrate before these libraries are deprecated. See the [Migration Guide]
+   (https://developers.google.com/identity/gsi/web/guides/gis-migration) for more information.');*/

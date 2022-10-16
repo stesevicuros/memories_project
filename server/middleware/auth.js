@@ -4,12 +4,12 @@ dotenv.config();
 
 const auth = async (req, res, next) => {
 	try {
-		const token = req.headers.authorization.split('')[1];
+		const token = req.headers.authorization.split(' ')[1];
 
 		let decodedData;
 
 		if (token) {
-			decodedData = jwt.verify(token, 'test');
+			decodedData = jwt.verify(token, process.env.MY_LITTLE_SECRET);
 
 			req.userId = decodedData?.id;
 		}

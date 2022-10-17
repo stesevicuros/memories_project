@@ -8,7 +8,8 @@ import {
 	Typography,
 	CircularProgress,
 } from '@material-ui/core';
-import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt';
+import ThumbUpOutlinedIcon from '@material-ui/icons/ThumbUpAltOutlined';
+import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import DeleteIcon from '@material-ui/icons/Delete';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import moment from 'moment';
@@ -22,6 +23,7 @@ export default function Post({ post, setCurrentId }) {
 	const [deleteBool, setDeleteBool] = useState(false);
 	const dispatch = useDispatch();
 	const classes = useStyles();
+	const user = JSON.parse(localStorage.getItem('profile'));
 
 	const handleDelete = () => {
 		dispatch(deletePost(post._id));
@@ -46,15 +48,19 @@ export default function Post({ post, setCurrentId }) {
 					{moment(post.createdAt).fromNow()}
 				</Typography>
 			</div>
-			<div className={classes.overlay2}>
-				<Button
-					style={{ color: 'white' }}
-					size='small'
-					onClick={() => setCurrentId(post._id)}
-				>
-					<MoreHorizIcon fontSize='medium' />
-				</Button>
-			</div>
+			{user?.result?._id === post?.creator && (
+				<div className={classes.overlay2}>
+					<Button
+						style={{
+							color: 'white',
+						}}
+						size='small'
+						onClick={() => setCurrentId(post._id)}
+					>
+						<MoreHorizIcon fontSize='medium' />
+					</Button>
+				</div>
+			)}
 			<div className={classes.details}>
 				<Typography variant='body2' color='textSecondary'>
 					{post.tags.map((tag) => `#${tag} `)}
@@ -72,25 +78,35 @@ export default function Post({ post, setCurrentId }) {
 				<Button
 					size='small'
 					color='primary'
-					style={{ display: 'flex', alignItems: 'flex-start' }}
+					style={{
+						display: 'flex',
+						alignItems: 'flex-start',
+						justifyContent: 'flex-start',
+					}}
+					disabled={!user?.result}
 					onClick={handleLike}
 				>
-					<ThumbUpAltIcon fontSize='small' />
-					&nbsp;Like&nbsp;{post.likes}
+					{post.likes.find((like) => like === user?.result?._id) ? (
+						<ThumbUpIcon fontSize='small' />
+					) : (
+						<ThumbUpOutlinedIcon fontSize='small' />
+					)}
+					&nbsp;{post.likes.length}
 				</Button>
 				{!deleteBool ? (
-					<Button
-						size='small'
-						style={{
-							display: 'flex',
-							alignItems: 'flex-start',
-							color: '#ff1010',
-						}}
-						onClick={handleDelete}
-					>
-						<DeleteIcon fontSize='small' />
-						Delete
-					</Button>
+					user?.result?._id === post?.creator && (
+						<Button
+							size='small'
+							style={{
+								alignItems: 'flex-start',
+								color: '#ff1010',
+							}}
+							onClick={handleDelete}
+						>
+							<DeleteIcon fontSize='small' />
+							Delete
+						</Button>
+					)
 				) : (
 					<CircularProgress
 						size='1.5rem'

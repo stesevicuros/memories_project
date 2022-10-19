@@ -9,6 +9,7 @@ export default (posts = [], action) => {
 				post._id === action.payload._id ? action.payload : post
 			);
 		case constants.FETCH_ALL:
+		case constants.FETCH_BY_SEARCH:
 			return action.payload;
 		case constants.CREATE:
 			return [...posts, action.payload];
